@@ -12,12 +12,14 @@ public class EditarDados {
 		Connection conexao;
 		try {
 			conexao = FabricaConexao.getConexao();
-			String sql = "UPDATE tb_expenses SET cl_nome =?, cl_valor=?, cl_categoria=?" + "WHERE id=?";
+			String sql = "UPDATE tb_expenses SET cl_nome =?, cl_valor=?, cl_categoria=? WHERE cl_id=?";
 			PreparedStatement stmt = conexao.prepareStatement(sql);
 			
 			stmt.setString(1, _nome);
 			stmt.setFloat(2, _valor);
 			stmt.setInt(3, _categoria);
+			stmt.setInt(4, _id);
+			stmt.execute();
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

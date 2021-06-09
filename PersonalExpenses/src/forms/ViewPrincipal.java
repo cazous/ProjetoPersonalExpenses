@@ -6,7 +6,8 @@ import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
@@ -28,8 +29,7 @@ import crud.BuscarDados;
 import crud.DeletarDados;
 import crud.EditarDados;
 import crud.InserirDados;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import validacao.ValidarDados;
 
 public class ViewPrincipal {
 
@@ -43,6 +43,7 @@ public class ViewPrincipal {
 	DeletarDados deldata = new DeletarDados();
 	BuscarDados bd = new BuscarDados();
 	EditarDados editData = new EditarDados();
+	ValidarDados vd = new ValidarDados();
 	private JTable tableGastos;
 
 	/**
@@ -145,21 +146,24 @@ public class ViewPrincipal {
 
 		JComboBox cbCategoria = new JComboBox();
 		cbCategoria.setBounds(78, 357, 220, 24);
-		cbCategoria.setModel(new DefaultComboBoxModel(new String[] { "Alimentação", "Transporte", "Recreativos", "Metas", "Fixos" }));
+		cbCategoria.setModel(new DefaultComboBoxModel(
+				new String[] { "Alimentação", "Transporte", "Recreativos", "Metas", "Fixos" }));
 		frmPersonalExpenses.getContentPane().add(cbCategoria);
 
 		txtFieldNome = new JTextField();
 		txtFieldNome.setBounds(78, 287, 325, 30);
 		frmPersonalExpenses.getContentPane().add(txtFieldNome);
 		txtFieldNome.setColumns(10);
-		
+
 		JButton btnDeletar = new JButton("Del");
 		btnDeletar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(JOptionPane.showConfirmDialog(null, "Deseja deletar esta linha?","Aviso", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+				if (JOptionPane.showConfirmDialog(null, "Deseja deletar esta linha?", "Aviso",
+						JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 					int i = tableGastos.getSelectedRow();
 					deldata.deletarDAO(tableGastos);
 					model.removeRow(i);
+					JOptionPane.showMessageDialog(null, "Item deletado com sucesso.");
 				}
 			}
 		});
@@ -171,7 +175,7 @@ public class ViewPrincipal {
 		frmPersonalExpenses.getContentPane().add(txtFieldValor);
 		txtFieldValor.setColumns(10);
 
-		JLabel lblNewLabel_1 = new JLabel("BAIXAR A PORRA DO ADDON");
+		JLabel lblNewLabel_1 = new JLabel("BAIXAR ADDON");
 		lblNewLabel_1.setBounds(77, 330, 210, 14);
 		frmPersonalExpenses.getContentPane().add(lblNewLabel_1);
 
@@ -184,26 +188,29 @@ public class ViewPrincipal {
 		btnAtualizarTabela.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int categoria = 0;
-				if(cbCategoria.getSelectedItem().toString() == "Alimentação") {
+				if (cbCategoria.getSelectedItem().toString() == "Alimentação") {
 					categoria = 1;
-				}else if(cbCategoria.getSelectedItem().toString() == "Transporte") {
+				} else if (cbCategoria.getSelectedItem().toString() == "Transporte") {
 					categoria = 2;
-				}else if(cbCategoria.getSelectedItem().toString() == "Recreativos") {
+				} else if (cbCategoria.getSelectedItem().toString() == "Recreativos") {
 					categoria = 3;
-				}else if(cbCategoria.getSelectedItem().toString() == "Metas") {
+				} else if (cbCategoria.getSelectedItem().toString() == "Metas") {
 					categoria = 4;
-				}else if(cbCategoria.getSelectedItem().toString() == "Fixos") {
+				} else if (cbCategoria.getSelectedItem().toString() == "Fixos") {
 					categoria = 5;
 				}
 				int row = tableGastos.getSelectedRow();
 				int cellId = Integer.parseInt(tableGastos.getModel().getValueAt(row, 0).toString());
-				editData.editarDAO(cellId,txtFieldNome.getText(), Float.parseFloat(txtFieldValor.getText()), categoria);
+				editData.editarDAO(cellId, txtFieldNome.getText(), Float.parseFloat(txtFieldValor.getText()),
+						categoria);
+				bd.buscarDAO(tableGastos);
+				JOptionPane.showMessageDialog(null, "Item editado com sucesso.");
 			}
 		});
 		frmPersonalExpenses.getContentPane().add(btnAtualizarTabela);
 
 		JScrollPane scrollPane = new JScrollPane();
-		
+
 		scrollPane.setBounds(140, 11, 496, 252);
 		frmPersonalExpenses.getContentPane().add(scrollPane);
 
@@ -217,6 +224,7 @@ public class ViewPrincipal {
 				cbCategoria.setSelectedItem(tableGastos.getModel().getValueAt(row, 3));
 			}
 		});
+
 		Object[] column = { "ID", "Nome", "Valor", "Categoria" };
 		Object[] row = new Object[4];
 		model.setColumnIdentifiers(column);
@@ -229,25 +237,27 @@ public class ViewPrincipal {
 		btnCriar.setBounds(523, 446, 113, 40);
 		btnCriar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+
 				int categoria = 0;
-				if(cbCategoria.getSelectedItem().toString() == "Alimentação") {
+				if (cbCategoria.getSelectedItem().toString() == "Alimentação") {
 					categoria = 1;
-				}else if(cbCategoria.getSelectedItem().toString() == "Transporte") {
+				} else if (cbCategoria.getSelectedItem().toString() == "Transporte") {
 					categoria = 2;
-				}else if(cbCategoria.getSelectedItem().toString() == "Recreativos") {
+				} else if (cbCategoria.getSelectedItem().toString() == "Recreativos") {
 					categoria = 3;
-				}else if(cbCategoria.getSelectedItem().toString() == "Metas") {
+				} else if (cbCategoria.getSelectedItem().toString() == "Metas") {
 					categoria = 4;
-				}else if(cbCategoria.getSelectedItem().toString() == "Fixos") {
+				} else if (cbCategoria.getSelectedItem().toString() == "Fixos") {
 					categoria = 5;
 				}
-				id.inserirDAO(txtFieldNome.getText(), Float.parseFloat(txtFieldValor.getText()), categoria);
 				
+				//vd.validarNumero(txtFieldValor.getText());
+
 				if (txtFieldNome.getText().equals("") || txtFieldValor.getText().equals("")
 						|| cbCategoria.getSelectedItem().equals(null)) {
 					JOptionPane.showMessageDialog(null, "Por favor preencha todos os campos obrigatórios.");
 				} else {
-					// row[0] = ENCONTRAR FORMA DE MOSTRAR O ID NA TABELA
+					id.inserirDAO(txtFieldNome.getText(), Float.parseFloat(txtFieldValor.getText()), categoria);
 					row[1] = txtFieldNome.getText();
 					row[2] = txtFieldValor.getText();
 					row[3] = cbCategoria.getSelectedItem();
@@ -260,9 +270,9 @@ public class ViewPrincipal {
 					JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso.");
 					bd.buscarDAO(tableGastos);
 				}
-				
 			}
 		});
+		
 		frmPersonalExpenses.getContentPane().add(btnCriar);
 
 	}

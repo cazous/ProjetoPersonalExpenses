@@ -11,6 +11,17 @@ import javax.swing.table.DefaultTableModel;
 import jdbc.FabricaConexao;
 
 public class BuscarDados {
+	
+	/*
+	 * public void limparTabela(DefaultTableModel _model, JTable _table) { int
+	 * maxRow = _table.getRowCount(); System.out.println(maxRow);
+	 * 
+	 * for(int i = 0; i < maxRow;i++) {
+	 * 
+	 * _model.removeRow(i);
+	 * 
+	 * } }
+	 */
 
 	public void buscarDAO(JTable _table) {
 
@@ -22,7 +33,10 @@ public class BuscarDados {
 			String sql = "SELECT * FROM tb_expenses";
 			Statement stmt = conexao.createStatement();
 			ResultSet rSet = stmt.executeQuery(sql);
-
+			
+			DefaultTableModel modelo = (DefaultTableModel) _table.getModel();
+			modelo.setRowCount(0);
+			
 			while (rSet.next()) {
 				String id = String.valueOf(rSet.getInt("cl_id"));
 				String nome = rSet.getString("cl_nome");
@@ -42,9 +56,8 @@ public class BuscarDados {
 				}
 
 				String tableData[] = { id, nome, valor, categoria };
-
-				DefaultTableModel modelo = (DefaultTableModel) _table.getModel();
-
+				
+				
 				modelo.addRow(tableData);
 			}
 
