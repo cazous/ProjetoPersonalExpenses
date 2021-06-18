@@ -30,6 +30,12 @@ import crud.DeletarDados;
 import crud.EditarDados;
 import crud.InserirDados;
 import validacao.ValidarDados;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class ViewPrincipal {
 
@@ -67,6 +73,7 @@ public class ViewPrincipal {
 	 */
 	public ViewPrincipal() {
 		initialize();
+		
 	}
 
 	/**
@@ -74,13 +81,14 @@ public class ViewPrincipal {
 	 */
 	private void initialize() {
 		frmPersonalExpenses = new JFrame();
+		
 		frmPersonalExpenses.getContentPane().setBackground(SystemColor.activeCaption);
 		frmPersonalExpenses.setTitle("Personal Expenses");
-		frmPersonalExpenses.setSize(662, 556);
+		frmPersonalExpenses.setSize(660, 660);
 		frmPersonalExpenses.setResizable(false);
 		frmPersonalExpenses.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmPersonalExpenses.getContentPane().setLayout(null);
-
+		JComboBox cbFiltroCategoria = new JComboBox();
 		JButton btnMensal = new JButton("Mensal");
 		btnMensal.setEnabled(false);
 		btnMensal.setForeground(new Color(0, 0, 0));
@@ -90,18 +98,80 @@ public class ViewPrincipal {
 
 		Box verticalBoxFiltros = Box.createVerticalBox();
 		verticalBoxFiltros.setBackground(SystemColor.activeCaption);
-		verticalBoxFiltros.setBounds(0, 68, 120, 103);
+		verticalBoxFiltros.setBounds(0, 114, 130, 91);
 		frmPersonalExpenses.getContentPane().add(verticalBoxFiltros);
 
 		JCheckBox chkFiltroMaiorValor = new JCheckBox("Maior Valor");
+		chkFiltroMaiorValor.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int categoria = 0;
+				if (chkFiltroMaiorValor.isSelected()) {
+					if (cbFiltroCategoria.getSelectedItem().toString() == "Alimentação") {
+						categoria = 1;
+					} else if (cbFiltroCategoria.getSelectedItem().toString() == "Transporte") {
+						categoria = 2;
+					} else if (cbFiltroCategoria.getSelectedItem().toString() == "Recreativos") {
+						categoria = 3;
+					} else if (cbFiltroCategoria.getSelectedItem().toString() == "Metas") {
+						categoria = 4;
+					} else if (cbFiltroCategoria.getSelectedItem().toString() == "Fixos") {
+						categoria = 5;
+					}
+					bd.buscarMaiorPreco(tableGastos, categoria, chkFiltroMaiorValor);
+				}else {
+					if (cbFiltroCategoria.getSelectedItem().toString() == "Alimentação") {
+						categoria = 1;
+					} else if (cbFiltroCategoria.getSelectedItem().toString() == "Transporte") {
+						categoria = 2;
+					} else if (cbFiltroCategoria.getSelectedItem().toString() == "Recreativos") {
+						categoria = 3;
+					} else if (cbFiltroCategoria.getSelectedItem().toString() == "Metas") {
+						categoria = 4;
+					} else if (cbFiltroCategoria.getSelectedItem().toString() == "Fixos") {
+						categoria = 5;
+					}
+					bd.buscarMaiorPreco(tableGastos, categoria, chkFiltroMaiorValor);
+				}
+			}
+		});
 		chkFiltroMaiorValor.setBackground(SystemColor.activeCaption);
 		verticalBoxFiltros.add(chkFiltroMaiorValor);
 
-		JCheckBox chkFiltroCategoria = new JCheckBox("Categoria");
-		chkFiltroCategoria.setBackground(SystemColor.activeCaption);
-		verticalBoxFiltros.add(chkFiltroCategoria);
-
 		JCheckBox chkFiltroNome = new JCheckBox("Nome");
+		chkFiltroNome.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int categoria = 0;
+				if (chkFiltroNome.isSelected()) {
+					if (cbFiltroCategoria.getSelectedItem().toString() == "Alimentação") {
+						categoria = 1;
+					} else if (cbFiltroCategoria.getSelectedItem().toString() == "Transporte") {
+						categoria = 2;
+					} else if (cbFiltroCategoria.getSelectedItem().toString() == "Recreativos") {
+						categoria = 3;
+					} else if (cbFiltroCategoria.getSelectedItem().toString() == "Metas") {
+						categoria = 4;
+					} else if (cbFiltroCategoria.getSelectedItem().toString() == "Fixos") {
+						categoria = 5;
+					}
+					bd.buscarNome(tableGastos, categoria, chkFiltroNome);
+				}else {
+					if (cbFiltroCategoria.getSelectedItem().toString() == "Alimentação") {
+						categoria = 1;
+					} else if (cbFiltroCategoria.getSelectedItem().toString() == "Transporte") {
+						categoria = 2;
+					} else if (cbFiltroCategoria.getSelectedItem().toString() == "Recreativos") {
+						categoria = 3;
+					} else if (cbFiltroCategoria.getSelectedItem().toString() == "Metas") {
+						categoria = 4;
+					} else if (cbFiltroCategoria.getSelectedItem().toString() == "Fixos") {
+						categoria = 5;
+					}
+					bd.buscarNome(tableGastos, categoria, chkFiltroNome);
+				}
+			}
+		});
 		chkFiltroNome.setBackground(SystemColor.activeCaption);
 		verticalBoxFiltros.add(chkFiltroNome);
 
@@ -116,42 +186,42 @@ public class ViewPrincipal {
 		frmPersonalExpenses.getContentPane().add(lblFiltro);
 
 		JLabel lblNewLabel = new JLabel("Total do mês");
-		lblNewLabel.setBounds(10, 175, 120, 23);
+		lblNewLabel.setBounds(10, 295, 120, 23);
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		frmPersonalExpenses.getContentPane().add(lblNewLabel);
 
 		JPanel panel = new JPanel();
-		panel.setBounds(10, 197, 120, 67);
+		panel.setBounds(10, 317, 120, 67);
 		frmPersonalExpenses.getContentPane().add(panel);
 
 		JLabel lblPrincipalNome = new JLabel("Nome:");
-		lblPrincipalNome.setBounds(10, 294, 58, 14);
+		lblPrincipalNome.setBounds(10, 414, 58, 14);
 		lblPrincipalNome.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		frmPersonalExpenses.getContentPane().add(lblPrincipalNome);
 
 		JLabel lblPrincipalData = new JLabel("Data:");
-		lblPrincipalData.setBounds(10, 328, 58, 14);
+		lblPrincipalData.setBounds(10, 448, 58, 14);
 		lblPrincipalData.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		frmPersonalExpenses.getContentPane().add(lblPrincipalData);
 
 		JLabel lblPrincipalCategoria = new JLabel("Categoria:");
-		lblPrincipalCategoria.setBounds(10, 362, 58, 14);
+		lblPrincipalCategoria.setBounds(10, 482, 58, 14);
 		lblPrincipalCategoria.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		frmPersonalExpenses.getContentPane().add(lblPrincipalCategoria);
 
 		JLabel lblPrincipalValor = new JLabel("Valor:");
-		lblPrincipalValor.setBounds(10, 396, 58, 14);
+		lblPrincipalValor.setBounds(10, 516, 58, 14);
 		lblPrincipalValor.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		frmPersonalExpenses.getContentPane().add(lblPrincipalValor);
 
 		JComboBox cbCategoria = new JComboBox();
-		cbCategoria.setBounds(78, 357, 220, 24);
+		cbCategoria.setBounds(78, 477, 220, 24);
 		cbCategoria.setModel(new DefaultComboBoxModel(
 				new String[] { "Alimentação", "Transporte", "Recreativos", "Metas", "Fixos" }));
 		frmPersonalExpenses.getContentPane().add(cbCategoria);
 
 		txtFieldNome = new JTextField();
-		txtFieldNome.setBounds(78, 287, 325, 30);
+		txtFieldNome.setBounds(78, 407, 325, 30);
 		frmPersonalExpenses.getContentPane().add(txtFieldNome);
 		txtFieldNome.setColumns(10);
 
@@ -167,24 +237,24 @@ public class ViewPrincipal {
 				}
 			}
 		});
-		btnDeletar.setBounds(145, 446, 113, 40);
+		btnDeletar.setBounds(145, 570, 113, 40);
 		frmPersonalExpenses.getContentPane().add(btnDeletar);
 
 		txtFieldValor = new JTextField();
-		txtFieldValor.setBounds(78, 394, 86, 20);
+		txtFieldValor.setBounds(78, 514, 86, 20);
 		frmPersonalExpenses.getContentPane().add(txtFieldValor);
 		txtFieldValor.setColumns(10);
 
 		JLabel lblNewLabel_1 = new JLabel("BAIXAR ADDON");
-		lblNewLabel_1.setBounds(77, 330, 210, 14);
+		lblNewLabel_1.setBounds(77, 450, 210, 14);
 		frmPersonalExpenses.getContentPane().add(lblNewLabel_1);
 
 		JSeparator separator = new JSeparator();
-		separator.setBounds(0, 275, 636, 2);
+		separator.setBounds(0, 395, 636, 2);
 		frmPersonalExpenses.getContentPane().add(separator);
 
 		JButton btnAtualizarTabela = new JButton("Update");
-		btnAtualizarTabela.setBounds(334, 446, 113, 40);
+		btnAtualizarTabela.setBounds(334, 570, 113, 40);
 		btnAtualizarTabela.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int categoria = 0;
@@ -211,7 +281,7 @@ public class ViewPrincipal {
 
 		JScrollPane scrollPane = new JScrollPane();
 
-		scrollPane.setBounds(140, 11, 496, 252);
+		scrollPane.setBounds(140, 11, 496, 373);
 		frmPersonalExpenses.getContentPane().add(scrollPane);
 
 		tableGastos = new JTable();
@@ -234,7 +304,7 @@ public class ViewPrincipal {
 		scrollPane.setViewportView(tableGastos);
 
 		JButton btnCriar = new JButton("New");
-		btnCriar.setBounds(523, 446, 113, 40);
+		btnCriar.setBounds(523, 570, 113, 40);
 		btnCriar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -250,30 +320,81 @@ public class ViewPrincipal {
 				} else if (cbCategoria.getSelectedItem().toString() == "Fixos") {
 					categoria = 5;
 				}
-				
-				//vd.validarNumero(txtFieldValor.getText());
 
-				if (txtFieldNome.getText().equals("") || txtFieldValor.getText().equals("")
-						|| cbCategoria.getSelectedItem().equals(null)) {
+				if (txtFieldNome.getText().equals("") || txtFieldValor.getText().equals("")) {
 					JOptionPane.showMessageDialog(null, "Por favor preencha todos os campos obrigatórios.");
 				} else {
-					id.inserirDAO(txtFieldNome.getText(), Float.parseFloat(txtFieldValor.getText()), categoria);
-					row[1] = txtFieldNome.getText();
-					row[2] = txtFieldValor.getText();
-					row[3] = cbCategoria.getSelectedItem();
-					model.addRow(row);
+					String stringValor = txtFieldValor.getText().replace(",", ".");
 
-					txtFieldNome.setText("");
-					txtFieldValor.setText("");
-					txtFieldNome.setText("");
-					cbCategoria.setSelectedItem(null);
-					JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso.");
-					bd.buscarDAO(tableGastos);
+					if (vd.validarNumero(txtFieldValor.getText()) == true) {
+
+						id.inserirDAO(txtFieldNome.getText(), Float.parseFloat(stringValor), categoria);
+						row[1] = txtFieldNome.getText();
+						row[2] = txtFieldValor.getText();
+						row[3] = cbCategoria.getSelectedItem();
+						model.addRow(row);
+
+						txtFieldNome.setText("");
+						txtFieldValor.setText("");
+						txtFieldNome.setText("");
+						JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso.");
+						bd.buscarDAO(tableGastos);
+					}
+
 				}
 			}
 		});
-		
+
 		frmPersonalExpenses.getContentPane().add(btnCriar);
+
+		
+		
+		cbFiltroCategoria.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+
+				if (cbFiltroCategoria.getSelectedItem() == null) {
+
+				} else {
+					int categoria = 0;
+					if (cbFiltroCategoria.getSelectedItem().toString() == "Alimentação") {
+						categoria = 1;
+					} else if (cbFiltroCategoria.getSelectedItem().toString() == "Transporte") {
+						categoria = 2;
+					} else if (cbFiltroCategoria.getSelectedItem().toString() == "Recreativos") {
+						categoria = 3;
+					} else if (cbFiltroCategoria.getSelectedItem().toString() == "Metas") {
+						categoria = 4;
+					} else if (cbFiltroCategoria.getSelectedItem().toString() == "Fixos") {
+						categoria = 5;
+					}
+					bd.buscarCategoria(tableGastos, categoria);
+				}
+			}
+		});
+
+		cbFiltroCategoria.setEditable(false);
+		cbFiltroCategoria.setBounds(10, 81, 120, 25);
+		cbFiltroCategoria.setModel(new DefaultComboBoxModel(
+				new String[] { "Alimentação", "Transporte", "Recreativos", "Metas", "Fixos" }));
+		frmPersonalExpenses.getContentPane().add(cbFiltroCategoria);
+
+		JLabel lblNewLabel_2 = new JLabel("Categoria:");
+		lblNewLabel_2.setBounds(10, 64, 76, 14);
+		frmPersonalExpenses.getContentPane().add(lblNewLabel_2);
+
+		JButton btnResetTable = new JButton("Reset Table");
+		btnResetTable.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cbFiltroCategoria.setSelectedItem(null);
+				chkFiltroMaiorValor.setSelected(false);
+				chkFiltroNome.setSelected(false);
+				chkFiltroData.setSelected(false);
+				bd.buscarDAO(tableGastos);
+			}
+		});
+
+		btnResetTable.setBounds(15, 216, 105, 23);
+		frmPersonalExpenses.getContentPane().add(btnResetTable);
 
 	}
 }

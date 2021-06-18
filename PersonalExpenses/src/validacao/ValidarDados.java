@@ -7,21 +7,17 @@ public class ValidarDados {
 		boolean validado = false;
 		int lenghtI = _txtFieldValor.length();
 		
-		if(_txtFieldValor.substring(0, lenghtI).matches("-?\\d+")) {
+		if(_txtFieldValor.substring(0, lenghtI).matches("^\\d+(\\.|,|\\d+)*$")) {
 			validado = true;
-		}else if(_txtFieldValor.isBlank()){
-			
+		}else {
 			JOptionPane.showMessageDialog(null, "Tipo de dado inserido incorretamente em: Campo Valor");
 		}
 		
 		return validado;
 	}
 	
-	public boolean validarPreenchimentodosCampos(String _txtFieldNome, String _txtFieldValor, int _categoria) {
-		boolean validado = false;
-		
-		
-		
-		return validado;
-	}
+	/*
+	 * public boolean validarData() { boolean validado = false;
+	 * return validado; }
+	 */
 }
